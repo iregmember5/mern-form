@@ -484,11 +484,222 @@
 
 //..........5
 
+// import React, { useState, useEffect } from 'react';
+
+// import {
+//   Container, Typography, TextField, Button, Card, CardContent,
+//   IconButton, Dialog, DialogTitle, DialogContent, DialogActions,
+//   Box, useTheme, createTheme, ThemeProvider, CssBaseline,
+//   Pagination, Switch
+// } from '@mui/material';
+// import { Edit, Delete } from '@mui/icons-material';
+// import axios from 'axios';
+// import dayjs from 'dayjs';
+// import { ToastContainer, toast } from 'react-toastify';
+// import 'react-toastify/dist/ReactToastify.css';
+
+// const lightTheme = createTheme({ palette: { mode: 'light' } });
+// const darkTheme = createTheme({ palette: { mode: 'dark' } });
+
+
+// export default function Form() {
+//   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+//   const [messages, setMessages] = useState([]);
+//   const [editingId, setEditingId] = useState(null);
+//   const [openModal, setOpenModal] = useState(false);
+//   const [deleteId, setDeleteId] = useState(null);
+//   const [themeMode, setThemeMode] = useState('light');
+
+//   // Pagination
+//   const [currentPage, setCurrentPage] = useState(1);
+//   const itemsPerPage = 3;
+
+//     const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+
+//   useEffect(() => {
+//     fetchMessages();
+//   }, []);
+
+//   const fetchMessages = async () => {
+//     try {
+//       const res = await axios.get(`${BACKEND_URL}/api/form`);
+//       const sorted = res.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+//       setMessages(sorted);
+//     } catch (err) {
+//       toast.error("Error fetching messages", err);
+//     }
+//   };
+
+//   const handleChange = (e) => {
+//     setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+//   };
+
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+//     try {
+//       if (editingId) {
+//         await axios.put(`https://mern-form-production.up.railway.app/api/form/${editingId}`, formData);
+//         toast.success("Message updated successfully");
+//       } else {
+//         await axios.post('https://mern-form-production.up.railway.app/api/form', formData);
+//         toast.success("Message submitted successfully");
+//       }
+//       setFormData({ name: '', email: '', message: '' });
+//       setEditingId(null);
+//       setOpenModal(false);
+//       fetchMessages();
+//     } catch (err) {
+//       toast.error("Error submitting the form", err);
+//     }
+//   };
+
+//   const handleEdit = (msg) => {
+//     setFormData({ name: msg.name, email: msg.email, message: msg.message });
+//     setEditingId(msg._id);
+//     setOpenModal(true);
+//   };
+
+//   const handleDelete = async () => {
+//     try {
+//       await axios.delete(`https://mern-form-production.up.railway.app/api/form/${deleteId}`);
+//       toast.info("Message deleted");
+//       setDeleteId(null);
+//       fetchMessages();
+//     } catch (err) {
+//       toast.error("Error deleting message", err);
+//     }
+//   };
+
+//   const handlePageChange = (_, value) => {
+//     setCurrentPage(value);
+//   };
+
+//   const paginatedMessages = messages.slice(
+//     (currentPage - 1) * itemsPerPage,
+//     currentPage * itemsPerPage
+//   );
+
+//   return (
+//     <ThemeProvider theme={themeMode === 'dark' ? darkTheme : lightTheme}>
+//       <CssBaseline />
+//       <Container maxWidth="sm" sx={{ mt: 4 }}>
+//         <ToastContainer position="top-right" autoClose={3000} />
+//         <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+//           <Typography variant="h4" fontWeight="bold">
+//             Contact Form
+//           </Typography>
+//           <Box display="flex" alignItems="center">
+//             <Typography variant="body2">Dark Mode</Typography>
+//             <Switch
+//               checked={themeMode === 'dark'}
+//               onChange={() => setThemeMode(prev => prev === 'dark' ? 'light' : 'dark')}
+//             />
+//           </Box>
+//         </Box>
+
+//         {/* Form */}
+//         <form onSubmit={handleSubmit}>
+//           <Box display="flex" flexDirection="column" gap={2}>
+//             <TextField label="Name" name="name" value={formData.name} onChange={handleChange} required />
+//             <TextField label="Email" name="email" value={formData.email} onChange={handleChange} required />
+//             <TextField
+//               label="Message"
+//               name="message"
+//               value={formData.message}
+//               onChange={handleChange}
+//               multiline rows={4}
+//               required
+//             />
+//             <Button type="submit" variant="contained" color="primary">
+//               {editingId ? 'Update' : 'Submit'}
+//             </Button>
+//           </Box>
+//         </form>
+
+//         {/* Messages */}
+//         <Typography variant="h5" gutterBottom mt={4}>
+//           Submitted Messages
+//         </Typography>
+//         {paginatedMessages.length === 0 ? (
+//           <Typography>No messages found.</Typography>
+//         ) : (
+//           paginatedMessages.map((msg) => (
+//             <Card key={msg._id} sx={{ mb: 2, boxShadow: 2 }}>
+//               <CardContent>
+//                 <Typography variant="h6">{msg.name}</Typography>
+//                 <Typography variant="subtitle2" color="text.secondary">
+//                   {msg.email} • {dayjs(msg.createdAt).format('MMM D, YYYY h:mm A')}
+//                 </Typography>
+//                 <Typography variant="body1" sx={{ mt: 1 }}>{msg.message}</Typography>
+//                 <Box mt={2} display="flex" gap={1}>
+//                   <IconButton color="primary" onClick={() => handleEdit(msg)}><Edit /></IconButton>
+//                   <IconButton color="error" onClick={() => setDeleteId(msg._id)}><Delete /></IconButton>
+//                 </Box>
+//               </CardContent>
+//             </Card>
+//           ))
+//         )}
+
+//         {/* Pagination */}
+//         <Box display="flex" justifyContent="center" mt={3}>
+//           <Pagination
+//             count={Math.ceil(messages.length / itemsPerPage)}
+//             page={currentPage}
+//             onChange={handlePageChange}
+//             color="primary"
+//           />
+//         </Box>
+
+//         {/* Edit Modal */}
+//         <Dialog open={openModal} onClose={() => setOpenModal(false)} fullWidth>
+//           <DialogTitle>Edit Message</DialogTitle>
+//           <DialogContent>
+//             <Box display="flex" flexDirection="column" gap={2} mt={1}>
+//               <TextField label="Name" name="name" value={formData.name} onChange={handleChange} fullWidth />
+//               <TextField label="Email" name="email" value={formData.email} onChange={handleChange} fullWidth />
+//               <TextField
+//                 label="Message"
+//                 name="message"
+//                 value={formData.message}
+//                 onChange={handleChange}
+//                 multiline
+//                 rows={4}
+//                 fullWidth
+//               />
+//             </Box>
+//           </DialogContent>
+//           <DialogActions>
+//             <Button onClick={() => setOpenModal(false)}>Cancel</Button>
+//             <Button onClick={handleSubmit} variant="contained" color="primary">Update</Button>
+//           </DialogActions>
+//         </Dialog>
+
+//         {/* Delete Confirmation Dialog */}
+//         <Dialog open={Boolean(deleteId)} onClose={() => setDeleteId(null)}>
+//           <DialogTitle>Confirm Deletion</DialogTitle>
+//           <DialogContent>
+//             Are you sure you want to delete this message?
+//           </DialogContent>
+//           <DialogActions>
+//             <Button onClick={() => setDeleteId(null)}>Cancel</Button>
+//             <Button onClick={handleDelete} color="error" variant="contained">Delete</Button>
+//           </DialogActions>
+//         </Dialog>
+//       </Container>
+//     </ThemeProvider>
+//   );
+// }
+
+
+
+//..................
+
+
 import React, { useState, useEffect } from 'react';
 import {
   Container, Typography, TextField, Button, Card, CardContent,
   IconButton, Dialog, DialogTitle, DialogContent, DialogActions,
-  Box, useTheme, createTheme, ThemeProvider, CssBaseline,
+  Box, createTheme, ThemeProvider, CssBaseline,
   Pagination, Switch
 } from '@mui/material';
 import { Edit, Delete } from '@mui/icons-material';
@@ -508,9 +719,10 @@ export default function Form() {
   const [deleteId, setDeleteId] = useState(null);
   const [themeMode, setThemeMode] = useState('light');
 
-  // Pagination
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 3;
+
+  const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
   useEffect(() => {
     fetchMessages();
@@ -518,7 +730,7 @@ export default function Form() {
 
   const fetchMessages = async () => {
     try {
-      const res = await axios.get('https://mern-form-production.up.railway.app/api/form');
+      const res = await axios.get(`${BACKEND_URL}/api/form`);
       const sorted = res.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
       setMessages(sorted);
     } catch (err) {
@@ -534,10 +746,10 @@ export default function Form() {
     e.preventDefault();
     try {
       if (editingId) {
-        await axios.put(`https://mern-form-production.up.railway.app/api/form/${editingId}`, formData);
+        await axios.put(`${BACKEND_URL}/api/form/${editingId}`, formData);
         toast.success("Message updated successfully");
       } else {
-        await axios.post('https://mern-form-production.up.railway.app/api/form', formData);
+        await axios.post(`${BACKEND_URL}/api/form`, formData);
         toast.success("Message submitted successfully");
       }
       setFormData({ name: '', email: '', message: '' });
@@ -557,7 +769,7 @@ export default function Form() {
 
   const handleDelete = async () => {
     try {
-      await axios.delete(`https://mern-form-production.up.railway.app/api/form/${deleteId}`);
+      await axios.delete(`${BACKEND_URL}/api/form/${deleteId}`);
       toast.info("Message deleted");
       setDeleteId(null);
       fetchMessages();
@@ -581,9 +793,7 @@ export default function Form() {
       <Container maxWidth="sm" sx={{ mt: 4 }}>
         <ToastContainer position="top-right" autoClose={3000} />
         <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-          <Typography variant="h4" fontWeight="bold">
-            Contact Form
-          </Typography>
+          <Typography variant="h4" fontWeight="bold">Contact Form</Typography>
           <Box display="flex" alignItems="center">
             <Typography variant="body2">Dark Mode</Typography>
             <Switch
@@ -593,7 +803,6 @@ export default function Form() {
           </Box>
         </Box>
 
-        {/* Form */}
         <form onSubmit={handleSubmit}>
           <Box display="flex" flexDirection="column" gap={2}>
             <TextField label="Name" name="name" value={formData.name} onChange={handleChange} required />
@@ -603,7 +812,8 @@ export default function Form() {
               name="message"
               value={formData.message}
               onChange={handleChange}
-              multiline rows={4}
+              multiline
+              rows={4}
               required
             />
             <Button type="submit" variant="contained" color="primary">
@@ -612,10 +822,7 @@ export default function Form() {
           </Box>
         </form>
 
-        {/* Messages */}
-        <Typography variant="h5" gutterBottom mt={4}>
-          Submitted Messages
-        </Typography>
+        <Typography variant="h5" gutterBottom mt={4}>Submitted Messages</Typography>
         {paginatedMessages.length === 0 ? (
           <Typography>No messages found.</Typography>
         ) : (
@@ -636,7 +843,6 @@ export default function Form() {
           ))
         )}
 
-        {/* Pagination */}
         <Box display="flex" justifyContent="center" mt={3}>
           <Pagination
             count={Math.ceil(messages.length / itemsPerPage)}
@@ -646,7 +852,6 @@ export default function Form() {
           />
         </Box>
 
-        {/* Edit Modal */}
         <Dialog open={openModal} onClose={() => setOpenModal(false)} fullWidth>
           <DialogTitle>Edit Message</DialogTitle>
           <DialogContent>
@@ -670,7 +875,6 @@ export default function Form() {
           </DialogActions>
         </Dialog>
 
-        {/* Delete Confirmation Dialog */}
         <Dialog open={Boolean(deleteId)} onClose={() => setDeleteId(null)}>
           <DialogTitle>Confirm Deletion</DialogTitle>
           <DialogContent>
@@ -685,4 +889,3 @@ export default function Form() {
     </ThemeProvider>
   );
 }
-
