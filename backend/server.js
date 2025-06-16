@@ -29,11 +29,18 @@ const dotenv = require('dotenv');
 dotenv.config(); // Load .env variables
 
 // console.log("MONGODB_URI:", process.env.MONGODB_URI); // Debug
+// console.log("FRONTEND_URL:", process.env.FRONTEND_URL); // Debug
 
 const formRoutes = require('./routes/form');
 
 const app = express();
-app.use(cors());
+app.use(cors(
+    {
+        origin: [process.env.FRONTEND_URL || 'http://localhost:5173'],
+        methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+        credentials: true,
+    }
+));
 app.use(express.json());
 
 mongoose.connect(process.env.MONGODB_URI)

@@ -518,7 +518,7 @@ export default function Form() {
 
   const fetchMessages = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/form');
+      const res = await axios.get('https://mern-form-production.up.railway.app/api/form');
       const sorted = res.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
       setMessages(sorted);
     } catch (err) {
@@ -534,10 +534,10 @@ export default function Form() {
     e.preventDefault();
     try {
       if (editingId) {
-        await axios.put(`http://localhost:5000/api/form/${editingId}`, formData);
+        await axios.put(`https://mern-form-production.up.railway.app/api/form/${editingId}`, formData);
         toast.success("Message updated successfully");
       } else {
-        await axios.post('http://localhost:5000/api/form', formData);
+        await axios.post('https://mern-form-production.up.railway.app/api/form', formData);
         toast.success("Message submitted successfully");
       }
       setFormData({ name: '', email: '', message: '' });
@@ -557,7 +557,7 @@ export default function Form() {
 
   const handleDelete = async () => {
     try {
-      await axios.delete(`http://localhost:5000/api/form/${deleteId}`);
+      await axios.delete(`https://mern-form-production.up.railway.app/api/form/${deleteId}`);
       toast.info("Message deleted");
       setDeleteId(null);
       fetchMessages();
