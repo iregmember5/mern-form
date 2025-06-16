@@ -36,11 +36,15 @@ const formRoutes = require('./routes/form');
 const app = express();
 app.use(cors(
     {
-        origin: [process.env.FRONTEND_URL || 'http://localhost:5173'],
-        methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+        origin: ['https://mern-form-kappa.vercel.app', 'http://localhost:5173'],
+        methods: ['GET,HEAD,PUT,PATCH,POST,DELETE'],
         credentials: true,
     }
 ));
+
+
+
+
 app.use(express.json());
 
 mongoose.connect(process.env.MONGODB_URI)

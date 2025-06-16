@@ -722,8 +722,7 @@ export default function Form() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 3;
 
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
-console.log('BACKEND_URL:', BACKEND_URL);
+
 
 
   useEffect(() => {
@@ -732,7 +731,7 @@ console.log('BACKEND_URL:', BACKEND_URL);
 
   const fetchMessages = async () => {
     try {
-      const res = await axios.get(`${BACKEND_URL}/api/form`);
+      const res = await axios.get('https://mern-form-production.up.railway.app/api/form');
       const sorted = res.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
       setMessages(sorted);
     } catch (err) {
@@ -748,10 +747,10 @@ console.log('BACKEND_URL:', BACKEND_URL);
     e.preventDefault();
     try {
       if (editingId) {
-        await axios.put(`${BACKEND_URL}/api/form/${editingId}`, formData);
+        await axios.put(`https://mern-form-production.up.railway.app/api/form/${editingId}`, formData);
         toast.success("Message updated successfully");
       } else {
-        await axios.post(`${BACKEND_URL}/api/form`, formData);
+        await axios.post('https://mern-form-production.up.railway.app/api/form', formData);
         toast.success("Message submitted successfully");
       }
       setFormData({ name: '', email: '', message: '' });
@@ -771,7 +770,7 @@ console.log('BACKEND_URL:', BACKEND_URL);
 
   const handleDelete = async () => {
     try {
-      await axios.delete(`${BACKEND_URL}/api/form/${deleteId}`);
+      await axios.delete(`https://mern-form-production.up.railway.app/api/form/${deleteId}`);
       toast.info("Message deleted");
       setDeleteId(null);
       fetchMessages();
