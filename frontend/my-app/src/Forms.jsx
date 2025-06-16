@@ -722,7 +722,9 @@ export default function Form() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 3;
 
-  const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
+console.log('BACKEND_URL:', BACKEND_URL);
+
 
   useEffect(() => {
     fetchMessages();
